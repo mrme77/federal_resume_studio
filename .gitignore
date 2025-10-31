@@ -69,7 +69,6 @@ next-env.d.ts
 # Test data and personal files
 *.docx
 *.pdf
-!public/**/*.pdf
 
 # Screenshots (except in public folder)
 *.png
