@@ -62,7 +62,7 @@ export default function Home() {
     setGeneratedResume(null);
   };
 
-  const handleFileSelect = (file: File) => {
+  const handleFileSelect = (file: File | null) => {
     setSelectedFile(file);
     setProcessingStatus("idle");
     setError("");
