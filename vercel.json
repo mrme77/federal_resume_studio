@@ -1,0 +1,14 @@
+{
+  "functions": {
+    "app/api/process/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/process-structured/route.ts": {
+      "maxDuration": 60
+    }
+  },
+  "buildCommand": "npm run build",
+  "env": {
+    "OPENROUTER_API_KEY": "@openrouter_api_key"
+  }
+}
