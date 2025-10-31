@@ -4,6 +4,7 @@ import "./globals.css";
 import { StarryBackground } from "@/components/StarryBackground";
 import { Footer } from "@/components/Footer";
 import { GitHubStarButton } from "@/components/GitHubStarButton";
+import { FeedbackButton } from "@/components/FeedbackButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,11 @@ export default function RootLayout({
         {/* Fixed GitHub Star Button - Upper Right */}
         <div className="fixed top-4 right-4 z-50">
           <GitHubStarButton showTooltip={true} />
+        </div>
+
+        {/* Fixed Feedback Button - Lower Right */}
+        <div className="fixed bottom-6 right-6 z-50">
+          <FeedbackButton />
         </div>
 
         <div className="relative z-10 flex-1 flex flex-col">
