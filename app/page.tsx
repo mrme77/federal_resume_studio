@@ -68,7 +68,7 @@ export default function Home() {
         setFlashContinueButton(true);
         setTimeout(() => {
           setFlashContinueButton(false);
-        }, 2000); // Flash for 2 seconds
+        }, 3000); // Flash for 3 seconds
       }, 100);
     }
   }, [processingMode]);
