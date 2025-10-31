@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FileUploader } from "@/components/FileUploader";
 
 import { ProcessingStatus } from "@/components/ProcessingStatus";
@@ -41,6 +41,22 @@ export default function Home() {
   const [generatedResume, setGeneratedResume] = useState<Blob | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [showGitHubCallout, setShowGitHubCallout] = useState<boolean>(false);
+
+  // Ref for auto-scrolling to job description input
+  const jobDescriptionRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to job description input when tailored mode is selected
+  useEffect(() => {
+    if (processingMode === "tailored" && jobDescriptionRef.current) {
+      // Small delay to ensure DOM is updated
+      setTimeout(() => {
+        jobDescriptionRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }, 100);
+    }
+  }, [processingMode]);
 
   const handleModeSelect = (mode: ProcessingMode) => {
     setProcessingMode(mode);
@@ -301,10 +317,12 @@ export default function Home() {
 
             {/* Job Description Input (only shown if tailored mode selected) */}
             {processingMode === "tailored" && (
-              <JobDescriptionInput
-                value={jobDescription}
-                onChange={setJobDescription}
-              />
+              <div ref={jobDescriptionRef}>
+                <JobDescriptionInput
+                  value={jobDescription}
+                  onChange={setJobDescription}
+                />
+              </div>
             )}
 
             {/* Continue Button */}
