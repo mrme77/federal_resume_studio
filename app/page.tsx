@@ -41,19 +41,34 @@ export default function Home() {
   const [generatedResume, setGeneratedResume] = useState<Blob | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [showGitHubCallout, setShowGitHubCallout] = useState<boolean>(false);
+  const [flashContinueButton, setFlashContinueButton] = useState<boolean>(false);
 
-  // Ref for auto-scrolling to job description input
+  // Refs for auto-scrolling
   const jobDescriptionRef = useRef<HTMLDivElement>(null);
+  const continueButtonRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to job description input when tailored mode is selected
+  // Auto-scroll and flash effects when mode is selected
   useEffect(() => {
     if (processingMode === "tailored" && jobDescriptionRef.current) {
-      // Small delay to ensure DOM is updated
+      // Scroll to job description input for tailored mode
       setTimeout(() => {
         jobDescriptionRef.current?.scrollIntoView({
           behavior: "smooth",
           block: "center"
         });
+      }, 100);
+    } else if (processingMode === "standard" && continueButtonRef.current) {
+      // Scroll to continue button for standard mode
+      setTimeout(() => {
+        continueButtonRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+        // Flash the button
+        setFlashContinueButton(true);
+        setTimeout(() => {
+          setFlashContinueButton(false);
+        }, 2000); // Flash for 2 seconds
       }, 100);
     }
   }, [processingMode]);
@@ -327,12 +342,16 @@ export default function Home() {
 
             {/* Continue Button */}
             {processingMode && (
-              <div className="flex justify-center mb-8">
+              <div ref={continueButtonRef} className="flex justify-center mb-8">
                 <Button
                   size="lg"
                   onClick={handleContinueToUpload}
                   disabled={!canContinue}
-                  className="px-8"
+                  className={`px-8 transition-all duration-300 ${
+                    flashContinueButton
+                      ? "animate-pulse ring-4 ring-primary/50 shadow-lg shadow-primary/50"
+                      : ""
+                  }`}
                 >
                   Continue to Upload Resume
                 </Button>
