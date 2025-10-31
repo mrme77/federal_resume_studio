@@ -9,7 +9,7 @@ import { ModeSelector, ProcessingMode } from "@/components/ModeSelector";
 import { JobDescriptionInput } from "@/components/JobDescriptionInput";
 import { MismatchDialog } from "@/components/MismatchDialog";
 import { RejectionDialog, RejectionType } from "@/components/RejectionDialog";
-import { DonationCallout } from "@/components/DonationButton";
+import { GitHubCallout } from "@/components/GitHubStarButton";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Shield, Loader2, ArrowLeft, Upload, Sparkles, Download, ExternalLink } from "lucide-react";
@@ -40,7 +40,7 @@ export default function Home() {
   const [error, setError] = useState<string>("");
   const [generatedResume, setGeneratedResume] = useState<Blob | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
-  const [showDonationCallout, setShowDonationCallout] = useState<boolean>(false);
+  const [showGitHubCallout, setShowGitHubCallout] = useState<boolean>(false);
 
   const handleModeSelect = (mode: ProcessingMode) => {
     setProcessingMode(mode);
@@ -144,7 +144,7 @@ export default function Home() {
       setGeneratedResume(blob);
       setProgress(100);
       setProcessingStatus("success");
-      setShowDonationCallout(true);
+      setShowGitHubCallout(true);
     } catch (err) {
       clearInterval(interval);
       setProcessingStatus("error");
@@ -178,7 +178,7 @@ export default function Home() {
     setShowRejectionDialog(false);
     setRejectionType(null);
     setRejectionMessage("");
-    setShowDonationCallout(false);
+    setShowGitHubCallout(false);
   };
 
   const handleRejectionClose = () => {
@@ -235,7 +235,7 @@ export default function Home() {
       setGeneratedResume(blob);
       setProgress(100);
       setProcessingStatus("success");
-      setShowDonationCallout(true);
+      setShowGitHubCallout(true);
     } catch (err) {
       clearInterval(interval);
       setProcessingStatus("error");
@@ -436,8 +436,8 @@ export default function Home() {
             </div>
 
             {/* Optional Donation Callout */}
-            {showDonationCallout && (
-              <DonationCallout onClose={() => setShowDonationCallout(false)} />
+            {showGitHubCallout && (
+              <GitHubCallout onClose={() => setShowGitHubCallout(false)} />
             )}
           </>
         )}

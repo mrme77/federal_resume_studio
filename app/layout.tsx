@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { StarryBackground } from "@/components/StarryBackground";
 import { Footer } from "@/components/Footer";
-import { DonationButton } from "@/components/DonationButton";
+import { GitHubStarButton } from "@/components/GitHubStarButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,9 +32,9 @@ export default function RootLayout({
       >
         <StarryBackground />
 
-        {/* Fixed Donation Button - Upper Right */}
+        {/* Fixed GitHub Star Button - Upper Right */}
         <div className="fixed top-4 right-4 z-50">
-          <DonationButton showCostInfo={false} />
+          <GitHubStarButton showTooltip={true} />
         </div>
 
         <div className="relative z-10 flex-1 flex flex-col">

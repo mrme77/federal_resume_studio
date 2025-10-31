@@ -98,11 +98,11 @@ Required environment variables:
 │   ├── api/
 │   │   ├── process/          # Main resume processing endpoint
 │   │   └── process-structured/  # Alternative processing endpoint
-│   ├── layout.tsx            # Root layout with footer and donation button
+│   ├── layout.tsx            # Root layout with footer and GitHub star button
 │   └── page.tsx              # Main application page
 ├── components/
 │   ├── ui/                   # Reusable UI components
-│   ├── DonationButton.tsx    # Support/donation component
+│   ├── GitHubStarButton.tsx  # GitHub star button component
 │   ├── FileUploader.tsx      # File upload component
 │   └── ...                   # Other components
 ├── lib/
