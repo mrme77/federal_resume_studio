@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { FileCheck, Target } from "lucide-react";
 
 export type ProcessingMode = "standard" | "tailored";

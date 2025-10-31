@@ -21,7 +21,6 @@ import { generateStructuredResume } from "@/lib/generators/structured-docx-gener
 import { detectFileType, generateOutputFilename } from "@/lib/utils/file-helpers";
 import { validateConfig } from "@/lib/utils/constants";
 import {
-  validateResumeContent,
   validateJobDescription,
   sanitizeResumeContent,
   performEarlyRejectionChecks,

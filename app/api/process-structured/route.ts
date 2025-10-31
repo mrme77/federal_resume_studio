@@ -16,7 +16,7 @@ import {
 import { generateStructuredResume } from "@/lib/generators/structured-docx-generator";
 import { detectFileType, generateOutputFilename } from "@/lib/utils/file-helpers";
 import { validateConfig } from "@/lib/utils/constants";
-import type { StructuredResume } from "@/lib/types/resume-types";
+
 
 export const runtime = "nodejs";
 export const maxDuration = 60; // 60 seconds for Vercel Pro

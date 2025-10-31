@@ -57,7 +57,7 @@ export function MismatchDialog({
                 <div className="flex-1">
                   <p className="font-medium text-sm mb-1">Continue with Standard Federal Format</p>
                   <p className="text-xs text-muted-foreground">
-                    We'll optimize your resume for federal compliance without tailoring to this specific job.
+                    We&apos;ll optimize your resume for federal compliance without tailoring to this specific job.
                   </p>
                 </div>
               </div>

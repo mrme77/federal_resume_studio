@@ -99,7 +99,7 @@ export function RejectionDialog({
               {rejectionType === "profanity" && (
                 <>
                   <li>• Remove any inappropriate language or profanity</li>
-                  <li>• Remove test or placeholder content (e.g., "Lorem Ipsum", "test test test")</li>
+                  <li>• Remove test or placeholder content (e.g., &quot;Lorem Ipsum&quot;, &quot;test test test&quot;)</li>
                   <li>• Ensure resume contains professional content only</li>
                 </>
               )}

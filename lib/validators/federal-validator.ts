@@ -280,7 +280,7 @@ function validateWorkExperienceSection(
 
 function validateEducationSection(content: string): { isValid: boolean; issues: ValidationIssue[] } {
   const issues: ValidationIssue[] = [];
-  let isValid = true;
+  const isValid = true;
 
   // Check for education section (required if applicable)
   if (!/education/i.test(content)) {

@@ -17,7 +17,7 @@ export function FileUploader({ onFileSelect, disabled }: FileUploaderProps) {
   const [validationError, setValidationError] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const validateAndSetFile = (file: File) => {
+  const validateAndSetFile = useCallback((file: File) => {
     // Reset error state
     setValidationError("");
 
@@ -44,7 +44,7 @@ export function FileUploader({ onFileSelect, disabled }: FileUploaderProps) {
     setSelectedFile(file);
     onFileSelect(file);
     return true;
-  };
+  }, [onFileSelect]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -72,7 +72,7 @@ export function FileUploader({ onFileSelect, disabled }: FileUploaderProps) {
         validateAndSetFile(file);
       }
     },
-    [onFileSelect]
+    [validateAndSetFile]
   );
 
   const handleClear = () => {

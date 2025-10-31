@@ -12,16 +12,36 @@ export interface ExtractResult {
   total_pages?: number;
 }
 
+// Define interfaces for the pdf2json data structure
+interface PdfText {
+  x: number;
+  y: number;
+  R: { T: string }[];
+}
+
+interface PdfPage {
+  Texts: PdfText[];
+}
+
+interface PdfData {
+  Pages: PdfPage[];
+}
+
+interface PdfError {
+  parserError: string;
+}
+
+
 /**
  * Extracts text from a PDF buffer using pdf2json.
  * @param buffer - PDF file as a Buffer.
  * @returns A Promise that resolves with the extraction result.
  */
 export function extractTextFromPDF(buffer: Buffer): Promise<ExtractResult> {
-  return new Promise((resolve, reject) => {
-    const pdfParser = new PDFParser(null, 1);
+  return new Promise((resolve) => {
+    const pdfParser = new PDFParser(null, true);
 
-    pdfParser.on("pdfParser_dataError", (errData: any) => {
+    pdfParser.on("pdfParser_dataError", (errData: PdfError) => {
       const error = new Error(errData.parserError || "Unknown PDF parsing error");
       console.error(error);
       resolve({
@@ -32,7 +52,7 @@ export function extractTextFromPDF(buffer: Buffer): Promise<ExtractResult> {
       });
     });
 
-    pdfParser.on("pdfParser_dataReady", (pdfData: any) => {
+    pdfParser.on("pdfParser_dataReady", (pdfData: PdfData) => {
       try {
         if (!pdfData || !pdfData.Pages) {
           throw new Error("Invalid PDF data structure received from parser.");
@@ -41,10 +61,10 @@ export function extractTextFromPDF(buffer: Buffer): Promise<ExtractResult> {
         const total_pages = pdfData.Pages.length;
         let full_text = "";
 
-        pdfData.Pages.forEach((page: any) => {
+        pdfData.Pages.forEach((page: PdfPage) => {
           if (!page.Texts) return;
           // Sort texts by their Y and then X coordinates
-          const texts = page.Texts.sort((a: any, b: any) => {
+          const texts = page.Texts.sort((a: PdfText, b: PdfText) => {
             if (a.y < b.y) return -1;
             if (a.y > b.y) return 1;
             if (a.x < b.x) return -1;
@@ -54,7 +74,7 @@ export function extractTextFromPDF(buffer: Buffer): Promise<ExtractResult> {
 
           let lastY = -1;
           let line = '';
-          texts.forEach((text: any, index: number) => {
+          texts.forEach((text: PdfText) => {
             const decodedText = decodeURIComponent(text.R[0].T).trim();
             if (decodedText) {
               // If Y position is significantly different, it's a new line

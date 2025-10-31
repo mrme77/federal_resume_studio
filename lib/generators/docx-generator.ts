@@ -9,13 +9,12 @@ import {
   Paragraph,
   TextRun,
   AlignmentType,
-  HeadingLevel,
   convertInchesToTwip,
 } from "docx";
 
 // Color scheme - professional blues and grays
 const COLOR_HEADER = "1F3864"; // Dark blue RGB(31, 56, 100)
-const COLOR_TITLE = "2C3E50"; // Dark gray-blue RGB(44, 62, 80)
+
 const COLOR_TEXT = "212121"; // Almost black RGB(33, 33, 33)
 
 // Federal Resume Formatting Specifications
@@ -87,7 +86,7 @@ function parseMarkdownToParagraphs(markdownText: string): Paragraph[] {
   let inContactSection = false;
 
   for (let i = 0; i < lines.length; i++) {
-    let line = lines[i].trim();
+    const line = lines[i].trim();
 
     // Skip empty lines
     if (!line) {

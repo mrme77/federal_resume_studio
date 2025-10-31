@@ -381,7 +381,7 @@ export function detectCriticalInjection(text: string): {
           patterns.push(`Base64-encoded injection attempt detected (decoded suspicious content)`);
           break;
         }
-      } catch (e) {
+      } catch {
         // Invalid base64 or decoding error - suspicious but not critical
       }
     }
@@ -411,7 +411,6 @@ export function performEarlyRejectionChecks(text: string): {
   rejectionType: "length" | "gibberish" | "profanity" | "injection" | null;
   details: string[];
 } {
-  const details: string[] = [];
 
   // Check 1: Length validation (200k chars / ~30 pages)
   const lengthCheck = validateResumeLength(text);
@@ -516,7 +515,7 @@ export function detectGibberish(text: string): {
 
   // Helper: Find sequences of 15+ characters with no vowels
   const findNoVowelSequences = (content: string): number => {
-    const minLength = 15;
+    
     const sequences = content.match(/[^aeiouAEIOU\s]{15,}/g);
     return sequences ? sequences.length : 0;
   };
@@ -690,7 +689,7 @@ export function sanitizeResumeContent(text: string): {
 
   // Check for patterns at document start (first 300 characters) - likely malicious
   const documentStart = text.substring(0, 300);
-  for (const { pattern, desc } of suspiciousPatterns) {
+  for (const { pattern } of suspiciousPatterns) {
     if (pattern.test(documentStart)) {
       criticalCount++;
       if (criticalCount >= 2) {

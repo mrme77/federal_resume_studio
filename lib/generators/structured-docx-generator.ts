@@ -7,7 +7,6 @@
 import {
   Document,
   Paragraph,
-  TextRun,
   AlignmentType,
   convertInchesToTwip,
   Packer,
@@ -384,22 +383,7 @@ function createSectionHeader(text: string): Paragraph {
   });
 }
 
-/**
- * Creates a body paragraph (regular text)
- */
-function createBodyParagraph(text: string): Paragraph {
-  return new Paragraph({
-    text: text,
-    alignment: AlignmentType.LEFT,
-    spacing: { after: SPACING_AFTER_PARAGRAPH },
-    style: "Normal",
-    run: {
-      font: FONT,
-      size: SIZE_BODY,
-      color: COLOR_TEXT,
-    },
-  });
-}
+
 
 /**
  * Creates a bullet point paragraph with hanging indent

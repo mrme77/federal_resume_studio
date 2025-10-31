@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { FileUploader } from "@/components/FileUploader";
-import { StarryBackground } from "@/components/StarryBackground";
+
 import { ProcessingStatus } from "@/components/ProcessingStatus";
 import { Disclaimer } from "@/components/Disclaimer";
 import { ModeSelector, ProcessingMode } from "@/components/ModeSelector";
@@ -11,7 +11,7 @@ import { MismatchDialog } from "@/components/MismatchDialog";
 import { RejectionDialog, RejectionType } from "@/components/RejectionDialog";
 import { DonationCallout } from "@/components/DonationButton";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Shield, Loader2, ArrowLeft, Upload, Sparkles, Download, ExternalLink } from "lucide-react";
 
 type ProcessingState = "idle" | "processing" | "success" | "error";

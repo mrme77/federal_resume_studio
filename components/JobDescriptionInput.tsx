@@ -21,6 +21,7 @@ export function JobDescriptionInput({ value, onChange, onValidationChange }: Job
   // Validate on value change (with debounce for better UX)
   useEffect(() => {
     if (value.length === 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setValidationError("");
       onValidationChange?.(true);
       return;
