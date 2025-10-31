@@ -44,7 +44,7 @@ This application uses artificial intelligence to process and reformat resumes. U
 While this tool is designed for federal resumes:
 - It does NOT guarantee compliance with specific agency requirements
 - It does NOT guarantee successful job applications
-- Users must verify compliance with OPM and agency-specific guidelines
+- Users must verify compliance with Federal and agency-specific guidelines
 - Users are responsible for all content submitted to federal agencies
 
 ### Privacy Notice

@@ -1,6 +1,6 @@
 /**
  * TypeScript interfaces for structured resume data
- * Based on OPM Professional Two-Page Resume Requirements
+ * Based on Federal Professional Two-Page Resume Requirements
  * Following salomone_resume.docx format
  */
 

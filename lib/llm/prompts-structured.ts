@@ -1,7 +1,7 @@
 /**
  * Structured LLM Prompts for Resume Content Extraction
  * Returns JSON data instead of formatted markdown
- * Based on OPM Professional Two-Page Resume Requirements
+ * Based on Federal Professional Two-Page Resume Requirements
  */
 
 import type { StructuredResume } from "../types/resume-types";
@@ -22,12 +22,12 @@ export function buildStructuredResumePrompt(resumeText: string, jobDescription?:
   const currentDateStr = currentDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
   const fiveYearsAgoStr = fiveYearsAgo.toLocaleDateString("en-US", { month: "long", year: "numeric" });
 
-  const prompt = `You are an expert federal resume content analyzer. Your task is to extract and optimize resume content following OPM (Office of Personnel Management) guidelines.${
+  const prompt = `You are an expert federal resume content analyzer. Your task is to extract and optimize resume content following Federal guidelines.${
     isTailored
       ? `
 
 **SPECIAL INSTRUCTIONS: JOB-TAILORED MODE ACTIVATED**
-This resume is being tailored for a specific job position. You must optimize the content to align with the target job while maintaining OPM compliance.`
+This resume is being tailored for a specific job position. You must optimize the content to align with the target job while maintaining Federal compliance.`
       : ""
   }
 
@@ -123,7 +123,7 @@ For each responsibility bullet:
 - If it relates to a job duty, use similar action verbs and terminology from the job description
 - Emphasize quantifiable achievements that demonstrate capabilities needed for the target job
 - Draw connections between past accomplishments and future job requirements
-- Maintain OPM best practices (metrics, impact, results)
+- Maintain Federal best practices (metrics, impact, results)
 
 **STEP 4: OPTIMIZE SKILLS & QUALIFICATIONS**
 - Extract and emphasize skills that match the job requirements
@@ -131,7 +131,7 @@ For each responsibility bullet:
 - Ensure citizenship, clearance, and eligibility information is accurate
 
 **CRITICAL CONSTRAINTS:**
-✓ MUST maintain OPM federal resume compliance
+✓ MUST maintain Federal resume compliance
 ✓ MUST stay within 2-page target (prioritize recent + relevant content)
 ✓ MUST preserve factual accuracy - only rephrase, don't fabricate
 ✓ MUST keep required federal elements (dates, hours, grades, etc.)
@@ -229,7 +229,7 @@ EXTRACTION RULES
 - For languages, include proficiency level
 
 ================================================================================
-CONTENT OPTIMIZATION GUIDELINES (OPM BEST PRACTICES)
+CONTENT OPTIMIZATION GUIDELINES (FEDERAL BEST PRACTICES)
 ================================================================================
 
 **PLAIN LANGUAGE:**
@@ -293,7 +293,7 @@ TASK: Extract and return the structured JSON data now.
  * System message for structured extraction
  */
 export function getStructuredSystemMessage(): string {
-  return `You are an expert federal resume content analyzer with extensive knowledge of OPM guidelines.
+  return `You are an expert federal resume content analyzer with extensive knowledge of Federal guidelines.
 You specialize in extracting and optimizing resume content, returning structured JSON data.
 You always return valid, well-formed JSON without any additional commentary.
 

@@ -1,6 +1,6 @@
 /**
  * Main Resume Processing API Route
- * Handles file upload, extraction, LLM processing, OPM validation, and DOCX generation
+ * Handles file upload, extraction, LLM processing, Federal validation, and DOCX generation
  */
 
 import { NextRequest, NextResponse } from "next/server";

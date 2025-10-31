@@ -1,7 +1,7 @@
 /**
  * Deterministic DOCX Generator for Federal Resumes
  * Uses structured data + fixed template (salomone format)
- * Follows OPM Professional Two-Page Resume Requirements
+ * Follows Federal Professional Two-Page Resume Requirements
  */
 
 import {
@@ -44,7 +44,7 @@ export interface StructuredDocxResult {
 }
 
 /**
- * Generates OPM-compliant DOCX from structured resume data
+ * Generates Federal-compliant DOCX from structured resume data
  * @param data - Structured resume data from LLM
  * @returns Buffer containing the formatted DOCX file
  */

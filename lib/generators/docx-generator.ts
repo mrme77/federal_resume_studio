@@ -1,7 +1,7 @@
 /**
  * Professional DOCX Generator for Federal Resumes
- * Creates OPM-compliant Word documents with proper federal resume styling
- * Follows OPM Professional Two-Page Resume Requirements
+ * Creates Federal-compliant Word documents with proper federal resume styling
+ * Follows Federal Professional Two-Page Resume Requirements
  */
 
 import {
@@ -320,8 +320,8 @@ function shouldSkipLine(line: string): boolean {
   const skipPhrases = [
     "formatted according to",
     "this resume",
-    "opm guidelines",
-    "comply with opm",
+    "federal guidelines",
+    "comply with federal",
     "generated with",
     "reformatted",
     "created using",

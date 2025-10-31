@@ -1,17 +1,17 @@
 /**
- * OPM Guidelines and Prompt Engineering
- * Creates prompts for LLM resume reformatting following OPM guidelines
+ * Federal Guidelines and Prompt Engineering
+ * Creates prompts for LLM resume reformatting following Federal guidelines
  */
 
 /**
  * Builds the comprehensive prompt for resume content extraction and optimization
  * The LLM will return structured JSON data, not formatted text
- * Based on OPM Professional Two-Page Resume Requirements
+ * Based on Federal Professional Two-Page Resume Requirements
  * @param resumeText - The extracted text from the original resume
  * @returns Formatted prompt for the LLM
  */
 export function buildResumePrompt(resumeText: string): string {
-  const prompt = `You are an expert federal resume content analyzer specializing in extracting and optimizing resume content following Office of Personnel Management (OPM) Professional Two-Page Resume Requirements.
+  const prompt = `You are an expert federal resume content analyzer specializing in extracting and optimizing resume content following Federal Professional Two-Page Resume Requirements.
 
 **YOUR TASK:** Extract and optimize the resume content, then return it as structured JSON data. You are NOT responsible for formatting - only for content extraction and optimization.
 
@@ -58,7 +58,7 @@ For EACH position, you MUST include ALL of the following:
 - Job title (with level of experience: Senior, Lead, Supervisor, Manager, etc.)
 - Position series and grade (if applicable: e.g., GS-12, GS-2210)
 - Start and end dates in MM/YYYY format
-- **Hours worked per week (REQUIRED by OPM)**
+- **Hours worked per week (REQUIRED by Federal guidelines)**
 - Name of employer/agency/organization
 - Location (City, State)
 
@@ -74,7 +74,7 @@ Then provide 3-5 bullet points that:
 • Use active voice with strong action verbs (e.g., Led, Managed, Developed, Implemented)
 • Focus on the "why" and impact, not just the "what"
 
-**PRIORITIZATION RULES FOR WORK EXPERIENCE (OPM REQUIREMENT):**
+**PRIORITIZATION RULES FOR WORK EXPERIENCE (FEDERAL REQUIREMENT):**
 - **FOCUS ON RELEVANT AND RECENT:** Prioritize work experience most relevant to the qualifications and duties listed in the job announcement
 - **REMOVE OUTDATED/NON-RELEVANT:** Remove outdated and non-relevant experience to save space and meet the 2-page limit
 - **MORE DETAIL FOR RECENT ROLES:** Most recent positions should have MORE detail (4-5 bullets with quantifiable metrics)
@@ -142,7 +142,7 @@ CRITICAL DATA PRESERVATION & REMOVAL RULES
 ✓ Grade levels (GS-XX)
 ✓ Series numbers (e.g., 2210, 0343)
 ✓ Exact employment dates (MM/YYYY format)
-✓ Hours per week (REQUIRED by OPM)
+✓ Hours per week (REQUIRED by Federal guidelines)
 ✓ Security clearance information
 ✓ Phone numbers and email addresses (REQUIRED contact info)
 ✓ All volunteer work and internship experience
@@ -161,7 +161,7 @@ CRITICAL DATA PRESERVATION & REMOVAL RULES
 They are REQUIRED contact information and MUST be included in the header (Line 2).
 
 ================================================================================
-OPM BEST PRACTICES FOR WRITING
+FEDERAL BEST PRACTICES FOR WRITING
 ================================================================================
 
 **RULE 1: USE PLAIN LANGUAGE**
@@ -194,7 +194,7 @@ Focus on accomplishments and impact, not just duties performed. Show:
 - If under 1.5 pages: Expand on accomplishments with specific examples
 
 ================================================================================
-FORMATTING SPECIFICATIONS (OPM COMPLIANT)
+FORMATTING SPECIFICATIONS (FEDERAL COMPLIANT)
 ================================================================================
 
 **PAGE LIMIT:** Exactly 2 pages maximum - STRICTLY ENFORCED
@@ -256,7 +256,7 @@ Focus on demonstrating qualifications with quantifiable accomplishments and impa
  * @returns System message defining the assistant's role
  */
 export function getSystemMessage(): string {
-  return `You are an expert federal resume consultant with extensive knowledge of OPM guidelines and federal hiring processes.
+  return `You are an expert federal resume consultant with extensive knowledge of Federal guidelines and federal hiring processes.
 You specialize in creating concise, compliant, and compelling federal resumes that meet all official requirements
 while highlighting the candidate's most relevant qualifications and accomplishments.`;
 }

@@ -1,7 +1,7 @@
 /**
- * OPM Resume Compliance Validator
- * Validates reformatted resumes against Office of Personnel Management (OPM) requirements
- * Based on OPM Professional Two-Page Resume Requirements
+ * Federal Resume Compliance Validator
+ * Validates reformatted resumes against Federal requirements
+ * Based on Federal Professional Two-Page Resume Requirements
  */
 
 export interface ValidationIssue {
@@ -32,11 +32,11 @@ export interface ValidationResult {
 }
 
 /**
- * Validates markdown resume content against OPM guidelines
+ * Validates markdown resume content against Federal guidelines
  * @param markdownContent - The markdown formatted resume to validate
  * @returns Detailed validation result with compliance score and issues
  */
-export function validateOPMCompliance(markdownContent: string): ValidationResult {
+export function validateFederalCompliance(markdownContent: string): ValidationResult {
   const issues: ValidationIssue[] = [];
   const sections = {
     contactInfo: false,
@@ -238,7 +238,7 @@ function validateCitizenshipSection(
     issues.push({
       severity: "error",
       category: "Required Sections",
-      message: "CITIZENSHIP & ELIGIBILITY section is missing. This is required by OPM.",
+      message: "CITIZENSHIP & ELIGIBILITY section is missing. This is required by Federal guidelines.",
       location: "Section 1",
     });
     isValid = false;
@@ -269,7 +269,7 @@ function validateWorkExperienceSection(
     issues.push({
       severity: "error",
       category: "Required Sections",
-      message: "WORK EXPERIENCE section is missing. This is required by OPM.",
+      message: "WORK EXPERIENCE section is missing. This is required by Federal guidelines.",
       location: "Section 2",
     });
     isValid = false;
@@ -325,12 +325,12 @@ function validateWorkExperienceDetails(lines: string[]): { issues: ValidationIss
     }
   }
 
-  // Hours per week is REQUIRED by OPM
+  // Hours per week is REQUIRED by Federal guidelines
   if (jobPositionCount > 0 && !foundHoursPerWeek) {
     issues.push({
       severity: "error",
       category: "Work Experience Details",
-      message: "Hours worked per week is REQUIRED by OPM for all positions. Add hours/week to job titles.",
+      message: "Hours worked per week is REQUIRED by Federal guidelines for all positions. Add hours/week to job titles.",
       location: "Work Experience",
     });
   }
@@ -386,7 +386,7 @@ function validateFormatting(
     issues.push({
       severity: "error",
       category: "Formatting",
-      message: `Resume appears to exceed 2 pages (estimated ${estimatedPages} pages). OPM requires exactly 2 pages maximum.`,
+      message: `Resume appears to exceed 2 pages (estimated ${estimatedPages} pages). Federal guidelines require exactly 2 pages maximum.`,
       location: "Overall Document",
     });
   }
@@ -436,7 +436,7 @@ function validateContentQuality(content: string, lines: string[]): { issues: Val
     issues.push({
       severity: "warning",
       category: "Content Quality",
-      message: "Define acronyms on first use (e.g., 'Customer Relationship Management (CRM)'). OPM requires plain language.",
+      message: "Define acronyms on first use (e.g., 'Customer Relationship Management (CRM)'). Federal guidelines require plain language.",
       location: "Throughout Document",
     });
   }
@@ -465,7 +465,7 @@ function checkProhibitedContent(content: string): { issues: ValidationIssue[] } 
     issues.push({
       severity: "warning",
       category: "Prohibited Content",
-      message: "Salary information detected. OPM guidelines typically require removal unless specifically requested by job announcement.",
+      message: "Salary information detected. Federal guidelines typically require removal unless specifically requested by job announcement.",
       location: "Work Experience",
     });
   }
@@ -476,7 +476,7 @@ function checkProhibitedContent(content: string): { issues: ValidationIssue[] } 
     issues.push({
       severity: "error",
       category: "Prohibited Content",
-      message: "Website URLs detected (LinkedIn, GitHub, personal sites). OPM guidelines require removal of all URLs.",
+      message: "Website URLs detected (LinkedIn, GitHub, personal sites). Federal guidelines require removal of all URLs.",
       location: "Throughout Document",
     });
   }
@@ -487,7 +487,7 @@ function checkProhibitedContent(content: string): { issues: ValidationIssue[] } 
     issues.push({
       severity: "error",
       category: "Prohibited Content",
-      message: "Social media profiles or links detected. These must be removed per OPM guidelines.",
+      message: "Social media profiles or links detected. These must be removed per Federal guidelines.",
       location: "Contact Information or Throughout",
     });
   }
@@ -504,7 +504,7 @@ export function generateValidationReport(result: ValidationResult): string {
   const { isCompliant, score, issues, summary, sections } = result;
 
   let report = "================================================================================\n";
-  report += "OPM RESUME COMPLIANCE VALIDATION REPORT\n";
+  report += "FEDERAL RESUME COMPLIANCE VALIDATION REPORT\n";
   report += "================================================================================\n\n";
 
   // Overall compliance status
@@ -566,7 +566,7 @@ export function generateValidationReport(result: ValidationResult): string {
       report += "\n";
     }
   } else {
-    report += "No issues detected. Resume meets OPM guidelines!\n\n";
+    report += "No issues detected. Resume meets Federal guidelines!\n\n";
   }
 
   report += "================================================================================\n";
@@ -577,11 +577,11 @@ export function generateValidationReport(result: ValidationResult): string {
 }
 
 /**
- * Quick compliance check - returns boolean indicating if resume is OPM compliant
+ * Quick compliance check - returns boolean indicating if resume is Federal compliant
  * @param markdownContent - The markdown formatted resume to check
  * @returns True if compliant, false otherwise
  */
-export function isOPMCompliant(markdownContent: string): boolean {
-  const result = validateOPMCompliance(markdownContent);
+export function isFederalCompliant(markdownContent: string): boolean {
+  const result = validateFederalCompliance(markdownContent);
   return result.isCompliant;
 }

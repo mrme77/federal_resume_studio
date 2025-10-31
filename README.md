@@ -4,7 +4,7 @@ An AI-powered web application that reformats resumes to meet federal employment 
 
 ## Features
 
-- **Federal Compliance**: Automatically formats resumes according to OPM guidelines
+- **Federal Compliance**: Automatically formats resumes according to Federal guidelines
 - **Job Tailoring**: Optional mode to tailor resumes for specific federal job postings
 - **AI-Powered**: Uses advanced language models via OpenRouter for intelligent content extraction and reformatting
 - **Privacy-Focused**: Zero data retention policy - your resume data is not stored
@@ -111,7 +111,7 @@ Required environment variables:
 │   ├── llm/                  # OpenRouter client and prompts
 │   ├── types/                # TypeScript types
 │   ├── utils/                # Utility functions and validators
-│   └── validators/           # OPM compliance validators
+│   └── validators/           # Federal compliance validators
 ├── public/                   # Static assets
 ├── archive/                  # Development docs and test files (not deployed)
 └── vercel.json              # Vercel deployment configuration
@@ -166,7 +166,7 @@ MIT License - see the [LICENSE](LICENSE) file for details
 
 - Powered by [OpenRouter](https://openrouter.ai/)
 - Built with [Next.js](https://nextjs.org/)
-- Inspired by federal resume formatting guidelines from [OPM](https://www.opm.gov/)
+- Inspired by federal resume formatting guidelines
 
 ## Disclaimer
 
