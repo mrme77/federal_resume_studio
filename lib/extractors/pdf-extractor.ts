@@ -28,7 +28,7 @@ interface PdfData {
 }
 
 interface PdfError {
-  parserError: string;
+  parserError: Error;
 }
 
 
@@ -41,12 +41,14 @@ export function extractTextFromPDF(buffer: Buffer): Promise<ExtractResult> {
   return new Promise((resolve) => {
     const pdfParser = new PDFParser(null, true);
 
-    pdfParser.on("pdfParser_dataError", (errData: PdfError) => {
-      const error = new Error(errData.parserError || "Unknown PDF parsing error");
-      console.error(error);
+    pdfParser.on("pdfParser_dataError", (errData: { parserError: Error } | Error) => {
+      const errorMessage = errData instanceof Error
+        ? errData.message
+        : (errData.parserError?.message || "Unknown PDF parsing error");
+      console.error("PDF parsing error:", errorMessage);
       resolve({
         success: false,
-        error: error.message,
+        error: errorMessage,
         full_text: "",
         total_pages: 0,
       });
