@@ -9,6 +9,6 @@
   },
   "buildCommand": "npm run build",
   "env": {
-    "OPENROUTER_API_KEY": "@openrouter_api_key"
+    "OPENROUTER_API_KEY": "@OPENROUTER_API_KEY"
   }
 }
