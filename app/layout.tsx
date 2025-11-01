@@ -5,6 +5,8 @@ import { StarryBackground } from "@/components/StarryBackground";
 import { Footer } from "@/components/Footer";
 import { GitHubStarButton } from "@/components/GitHubStarButton";
 import { FeedbackButton } from "@/components/FeedbackButton";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,6 +49,8 @@ export default function RootLayout({
           {children}
         </div>
         <Footer />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
