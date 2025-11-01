@@ -27,7 +27,7 @@ export function FeedbackButton() {
           onClick={() => setIsModalOpen(true)}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="relative w-16 h-16 rounded-full bg-gradient-to-br from-primary/70 via-primary/60 to-accent/70 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 group-hover:animate-none animate-feedback-pulse"
+          className="relative w-14 h-14 rounded-full bg-gradient-to-br from-primary/70 via-primary/60 to-accent/70 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 group-hover:animate-none animate-feedback-pulse"
           aria-label="Send Feedback"
         >
           {/* Pulsing Ring */}
@@ -35,7 +35,7 @@ export function FeedbackButton() {
 
           {/* Icon */}
           <div className="relative z-10 flex items-center justify-center h-full">
-            <Mail className="h-7 w-7 text-white" />
+            <Mail className="h-6 w-6 text-white" />
           </div>
         </button>
       </div>
