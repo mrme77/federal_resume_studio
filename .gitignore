@@ -80,3 +80,6 @@ next-env.d.ts
 !public/**/*.svg
 !public/**/*.jpeg
 !public/**/*.gif
+
+# Documentation
+/documentation/

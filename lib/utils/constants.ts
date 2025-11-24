@@ -19,8 +19,8 @@ export const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
 // - openai/gpt-4o-mini: Fast, cost-effective, excellent for text analysis
 // - anthropic/claude-3.5-sonnet: Superior at following formatting guidelines
 // - openai/gpt-4o: Most powerful but slower/more expensive
-export const DEFAULT_MODEL = "meta-llama/llama-3.3-70b-instruct";
-// export const DEFAULT_MODEL = "openai/gpt-4o-mini";  // OpenAI alternative
+// export const DEFAULT_MODEL = "meta-llama/llama-3.3-70b-instruct";
+export const DEFAULT_MODEL = "openai/gpt-4o-mini";  // OpenAI alternative
 // export const DEFAULT_MODEL = "google/gemini-2.5-flash-lite";  // Google alternative
 
 // File Configuration

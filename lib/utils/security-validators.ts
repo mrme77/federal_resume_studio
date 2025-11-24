@@ -515,7 +515,7 @@
 
 //   // Helper: Find sequences of 15+ characters with no vowels
 //   const findNoVowelSequences = (content: string): number => {
-    
+
 //     const sequences = content.match(/[^aeiouAEIOU\s]{15,}/g);
 //     return sequences ? sequences.length : 0;
 //   };
@@ -1278,7 +1278,7 @@ export function detectGibberish(text: string): {
 
     for (let i = 0; i <= content.length - blockSize; i += 10) {
       const block = content.substring(i, i + blockSize);
-      
+
       // ADDED: Skip if block matches any whitelisted pattern
       const isWhitelisted = whitelistPatterns.some(pattern => pattern.test(block));
       if (isWhitelisted) {
@@ -1305,6 +1305,7 @@ export function detectGibberish(text: string): {
 
   // Helper: Find sequences of 15+ characters with no vowels
   const findNoVowelSequences = (content: string): number => {
+
     const sequences = content.match(/[^aeiouAEIOU\s]{15,}/g);
     return sequences ? sequences.length : 0;
   };
@@ -1334,7 +1335,7 @@ export function detectGibberish(text: string): {
     // Unusual symbols that rarely appear in legitimate resumes
     const unicodeSymbols = /[■□▪▫●○◆◇★☆►◄▲▼λ∑∏∫≈≠±]/g;
     const matches = content.match(unicodeSymbols);
-    
+
     // UPDATED: Allow some bullet points, but flag if excessive (>20)
     if (matches && matches.length > 20) return true;
 
@@ -1485,7 +1486,7 @@ export function sanitizeResumeContent(text: string): {
   }
 
   // Check for patterns at document start (first 300 characters) - likely malicious
-  const documentStart = text.substring(0,300);
+  const documentStart = text.substring(0, 300);
   for (const { pattern } of suspiciousPatterns) {
     if (pattern.test(documentStart)) {
       criticalCount++;

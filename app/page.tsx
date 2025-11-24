@@ -7,6 +7,7 @@ import { ProcessingStatus } from "@/components/ProcessingStatus";
 import { Disclaimer } from "@/components/Disclaimer";
 import { ModeSelector, ProcessingMode } from "@/components/ModeSelector";
 import { JobDescriptionInput } from "@/components/JobDescriptionInput";
+import { AssessmentResult } from "@/components/AssessmentResult";
 import { MismatchDialog } from "@/components/MismatchDialog";
 import { RejectionDialog, RejectionType } from "@/components/RejectionDialog";
 import { GitHubCallout } from "@/components/GitHubStarButton";
@@ -39,6 +40,7 @@ export default function Home() {
   const [progress, setProgress] = useState<number>(0);
   const [error, setError] = useState<string>("");
   const [generatedResume, setGeneratedResume] = useState<Blob | null>(null);
+  const [assessmentResult, setAssessmentResult] = useState<any | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [showGitHubCallout, setShowGitHubCallout] = useState<boolean>(false);
   const [flashContinueButton, setFlashContinueButton] = useState<boolean>(false);
@@ -49,8 +51,8 @@ export default function Home() {
 
   // Auto-scroll and flash effects when mode is selected
   useEffect(() => {
-    if (processingMode === "tailored" && jobDescriptionRef.current) {
-      // Scroll to job description input for tailored mode
+    if ((processingMode === "tailored" || processingMode === "assessment") && jobDescriptionRef.current) {
+      // Scroll to job description input for tailored or assessment mode
       setTimeout(() => {
         jobDescriptionRef.current?.scrollIntoView({
           behavior: "smooth",
@@ -78,6 +80,15 @@ export default function Home() {
     // Reset job description if switching from tailored to standard
     if (mode === "standard") {
       setJobDescription("");
+    } else if ((mode === "tailored" || mode === "assessment") && jobDescriptionRef.current) {
+      // Scroll to job description input for tailored or assessment mode
+      setJobDescription(""); // Clear job description when selecting tailored/assessment mode
+      setTimeout(() => {
+        jobDescriptionRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }, 100);
     }
   };
 
@@ -91,6 +102,7 @@ export default function Home() {
     setProcessingStatus("idle");
     setError("");
     setGeneratedResume(null);
+    setAssessmentResult(null);
   };
 
   const handleFileSelect = (file: File | null) => {
@@ -98,6 +110,7 @@ export default function Home() {
     setProcessingStatus("idle");
     setError("");
     setGeneratedResume(null);
+    setAssessmentResult(null);
   };
 
   const handleProcess = async () => {
@@ -125,13 +138,16 @@ export default function Home() {
       formData.append("file", selectedFile);
 
       // Add job description if in tailored mode
-      if (processingMode === "tailored" && jobDescription.trim()) {
+      // Add job description if in tailored mode or assessment mode
+      if ((processingMode === "tailored" || processingMode === "assessment") && jobDescription) {
         formData.append("jobDescription", jobDescription.trim());
       }
 
-      setProcessingStage("Uploading and processing file...");
+      setProcessingStage(processingMode === "assessment" ? "Analyzing resume against job description..." : "Uploading and processing file...");
 
-      const response = await fetch("/api/process", {
+      const endpoint = processingMode === "assessment" ? "/api/assess" : "/api/process";
+
+      const response = await fetch(endpoint, {
         method: "POST",
         body: formData,
       });
@@ -157,10 +173,13 @@ export default function Home() {
       }
 
       // Check if response is JSON (mismatch) or blob (success)
+      // Check if response is JSON (mismatch or assessment result) or blob (generated resume)
       const contentType = response.headers.get("content-type");
+
       if (contentType && contentType.includes("application/json")) {
-        // Mismatch response
         const data = await response.json();
+
+        // Check for mismatch first
         if (data.mismatch) {
           console.log("Mismatch detected:", data.reason);
           setMismatchReason(data.reason);
@@ -169,13 +188,22 @@ export default function Home() {
           setProgress(0);
           return;
         }
+
+        // If assessment mode, this is the result
+        if (processingMode === "assessment") {
+          setAssessmentResult(data);
+        }
+      } else {
+        // It's a blob (generated resume)
+        const blob = await response.blob();
+        setGeneratedResume(blob);
       }
 
-      const blob = await response.blob();
-      setGeneratedResume(blob);
       setProgress(100);
       setProcessingStatus("success");
-      setShowGitHubCallout(true);
+      if (processingMode !== "assessment") {
+        setShowGitHubCallout(true);
+      }
     } catch (err) {
       clearInterval(interval);
       setProcessingStatus("error");
@@ -203,6 +231,7 @@ export default function Home() {
     setProcessingStatus("idle");
     setError("");
     setGeneratedResume(null);
+    setAssessmentResult(null);
     setProgress(0);
     setShowMismatchDialog(false);
     setMismatchReason("");
@@ -280,7 +309,7 @@ export default function Home() {
     handleReset();
   };
 
-  const canContinue = processingMode === "standard" || (processingMode === "tailored" && jobDescription.trim().length >= 50);
+  const canContinue = processingMode === "standard" || ((processingMode === "tailored" || processingMode === "assessment") && jobDescription.trim().length >= 10);
 
   return (
     <div className="min-h-screen bg-background">
@@ -296,7 +325,7 @@ export default function Home() {
               </h1>
             </div>
             <p className="text-md text-muted-foreground font-medium">
-              AI Powered Federally-Compliant Resume Generation {processingMode === "tailored" && "& Job Tailoring"}
+              AI Powered Federally-Compliant Resume Generation {processingMode === "tailored" && "& Job Tailoring"} {processingMode === "assessment" && "& Assessment"}
             </p>
           </div>
         </div>
@@ -330,8 +359,8 @@ export default function Home() {
               <Disclaimer />
             </div>
 
-            {/* Job Description Input (only shown if tailored mode selected) */}
-            {processingMode === "tailored" && (
+            {/* Job Description Input (only shown if tailored or assessment mode selected) */}
+            {(processingMode === "tailored" || processingMode === "assessment") && (
               <div ref={jobDescriptionRef}>
                 <JobDescriptionInput
                   value={jobDescription}
@@ -347,11 +376,10 @@ export default function Home() {
                   size="lg"
                   onClick={handleContinueToUpload}
                   disabled={!canContinue}
-                  className={`px-8 transition-all duration-300 ${
-                    flashContinueButton
-                      ? "animate-pulse ring-4 ring-primary/50 shadow-lg shadow-primary/50"
-                      : ""
-                  }`}
+                  className={`px-8 transition-all duration-300 ${flashContinueButton
+                    ? "animate-pulse ring-4 ring-primary/50 shadow-lg shadow-primary/50"
+                    : ""
+                    }`}
                 >
                   Continue to Upload Resume
                 </Button>
@@ -378,106 +406,115 @@ export default function Home() {
 
             {/* How it works */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 text-center">
-          <Card className="p-6 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:shadow-primary/20 border-primary/20 bg-gradient-to-br from-card to-primary/5 group">
-            <div className="flex items-center justify-center mb-4">
-              <div className="relative">
-                <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-                <div className="relative p-4 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full group-hover:scale-110 transition-transform duration-300">
-                  <Upload className="h-10 w-10 text-primary group-hover:animate-bounce" />
+              <Card className="p-6 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:shadow-primary/20 border-primary/20 bg-gradient-to-br from-card to-primary/5 group">
+                <div className="flex items-center justify-center mb-4">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                    <div className="relative p-4 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full group-hover:scale-110 transition-transform duration-300">
+                      <Upload className="h-10 w-10 text-primary group-hover:animate-bounce" />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <h3 className="text-lg font-semibold mb-2 text-primary">Upload Your Resume</h3>
-            <p className="text-muted-foreground text-sm">Upload your current federal resume in PDF or Word format.</p>
-          </Card>
-          <Card className="p-6 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:shadow-accent/20 border-accent/20 bg-gradient-to-br from-card to-accent/5 group">
-            <div className="flex items-center justify-center mb-4">
-              <div className="relative">
-                <div className="absolute inset-0 bg-accent/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-                <div className="relative p-4 bg-gradient-to-br from-accent/20 to-accent/10 rounded-full group-hover:scale-110 transition-transform duration-300">
-                  <Sparkles className="h-10 w-10 text-accent group-hover:animate-pulse" />
+                <h3 className="text-lg font-semibold mb-2 text-primary">Upload Your Resume</h3>
+                <p className="text-muted-foreground text-sm">Upload your current federal resume in PDF or Word format.</p>
+              </Card>
+              <Card className="p-6 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:shadow-accent/20 border-accent/20 bg-gradient-to-br from-card to-accent/5 group">
+                <div className="flex items-center justify-center mb-4">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-accent/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                    <div className="relative p-4 bg-gradient-to-br from-accent/20 to-accent/10 rounded-full group-hover:scale-110 transition-transform duration-300">
+                      <Sparkles className="h-10 w-10 text-accent group-hover:animate-pulse" />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <h3 className="text-lg font-semibold mb-2 text-accent">AI Reformatting</h3>
-            <p className="text-muted-foreground text-sm">Our AI analyzes and reformats it using federal guidelines.</p>
-          </Card>
-          <Card className="p-6 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:shadow-primary/20 border-primary/20 bg-gradient-to-br from-card to-primary/5 group">
-            <div className="flex items-center justify-center mb-4">
-              <div className="relative">
-                <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-                <div className="relative p-4 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full group-hover:scale-110 transition-transform duration-300">
-                  <Download className="h-10 w-10 text-primary group-hover:animate-bounce" />
+                <h3 className="text-lg font-semibold mb-2 text-accent">AI Reformatting</h3>
+                <p className="text-muted-foreground text-sm">Our AI analyzes and reformats it using federal guidelines.</p>
+              </Card>
+              <Card className="p-6 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:shadow-primary/20 border-primary/20 bg-gradient-to-br from-card to-primary/5 group">
+                <div className="flex items-center justify-center mb-4">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                    <div className="relative p-4 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full group-hover:scale-110 transition-transform duration-300">
+                      <Download className="h-10 w-10 text-primary group-hover:animate-bounce" />
+                    </div>
+                  </div>
                 </div>
-              </div>
+                <h3 className="text-lg font-semibold mb-2 text-primary">Download Document</h3>
+                <p className="text-muted-foreground text-sm">Download your professional, federally compliant 2-page resume.</p>
+              </Card>
             </div>
-            <h3 className="text-lg font-semibold mb-2 text-primary">Download Document</h3>
-            <p className="text-muted-foreground text-sm">Download your professional, federally compliant 2-page resume.</p>
-          </Card>
-        </div>
 
-        {/* Search Federal Jobs Button */}
-        <div className="flex justify-center mb-8">
-          <Button
-            variant="outline"
-            size="lg"
-            asChild
-            className="gap-2 border-primary/30 hover:border-primary hover:bg-primary/5 transition-all duration-300"
-          >
-            <a href="https://www.usajobs.gov/" target="_blank" rel="noopener noreferrer" aria-label="Search Federal Jobs on USAJobs.gov (opens in new tab)">
-              Search Federal Jobs
-              <ExternalLink className="h-4 w-4" aria-hidden="true" />
-            </a>
-          </Button>
-        </div>
-
-        {/* File Uploader */}
-        <div className="mb-8">
-          <FileUploader onFileSelect={handleFileSelect} disabled={processingStatus === "processing"} />
-        </div>
-
-        {/* Process Button */}
-        {selectedFile && processingStatus === "idle" && (
-          <div className="flex justify-center mb-8">
-            <Button size="lg" onClick={handleProcess} className="px-8" disabled={isUploading}>
-              {isUploading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} 
-              Reformat Resume
-            </Button>
-          </div>
-        )}
-
-        {/* Processing Status */}
-        {processingStatus !== "idle" && (
-          <div className="mb-8">
-            <ProcessingStatus status={processingStatus} stage={processingStage} progress={progress} error={error} />
-          </div>
-        )}
-
-        {/* Action Buttons */}
-        {processingStatus === "error" && (
-          <div className="flex justify-center mb-8">
-            <Button variant="outline" onClick={handleReset}>
-              Try Again
-            </Button>
-          </div>
-        )}
-        {processingStatus === "success" && (
-          <>
-            <div className="flex justify-center gap-4 mb-8">
-              <Button size="lg" onClick={handleDownload}>
-                Download Resume
-              </Button>
-              <Button variant="outline" onClick={handleReset}>
-                Start Over
+            {/* Search Federal Jobs Button */}
+            <div className="flex justify-center mb-8">
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+                className="gap-2 border-primary/30 hover:border-primary hover:bg-primary/5 transition-all duration-300"
+              >
+                <a href="https://www.usajobs.gov/" target="_blank" rel="noopener noreferrer" aria-label="Search Federal Jobs on USAJobs.gov (opens in new tab)">
+                  Search Federal Jobs
+                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                </a>
               </Button>
             </div>
 
-            {/* Optional Donation Callout */}
-            {showGitHubCallout && (
-              <GitHubCallout onClose={() => setShowGitHubCallout(false)} />
+            {/* File Uploader */}
+            <div className="mb-8">
+              <FileUploader onFileSelect={handleFileSelect} disabled={processingStatus === "processing"} />
+            </div>
+
+            {/* Process Button */}
+            {selectedFile && processingStatus === "idle" && (
+              <div className="flex justify-center mb-8">
+                <Button size="lg" onClick={handleProcess} className="px-8" disabled={isUploading}>
+                  {isUploading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {processingMode === "assessment" ? "Assess Resume" : "Reformat Resume"}
+                </Button>
+              </div>
             )}
-          </>
-        )}
+
+            {/* Processing Status */}
+            {processingStatus !== "idle" && (
+              <div className="mb-8">
+                <ProcessingStatus status={processingStatus} stage={processingStage} progress={progress} error={error} />
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            {processingStatus === "error" && (
+              <div className="flex justify-center mb-8">
+                <Button variant="outline" onClick={handleReset}>
+                  Try Again
+                </Button>
+              </div>
+            )}
+            {processingStatus === "success" && (
+              <>
+                <div className="flex justify-center gap-4 mb-8">
+                  {processingMode !== "assessment" && (
+                    <Button size="lg" onClick={handleDownload}>
+                      Download Resume
+                    </Button>
+                  )}
+                  <Button variant="outline" onClick={handleReset}>
+                    {processingMode === "assessment" ? "Assess Another" : "Start Over"}
+                  </Button>
+                </div>
+
+                {/* Assessment Result */}
+                {processingMode === "assessment" && assessmentResult && (
+                  <div className="mb-8">
+                    <AssessmentResult result={assessmentResult} />
+                  </div>
+                )}
+
+                {/* Optional Donation Callout */}
+                {showGitHubCallout && (
+                  <GitHubCallout onClose={() => setShowGitHubCallout(false)} />
+                )}
+              </>
+            )}
 
             {/* Disclaimer */}
             <div className="mt-12">

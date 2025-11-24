@@ -260,3 +260,74 @@ export function getSystemMessage(): string {
 You specialize in creating concise, compliant, and compelling federal resumes that meet all official requirements
 while highlighting the candidate's most relevant qualifications and accomplishments.`;
 }
+
+/**
+ * Builds the prompt for resume assessment against a job description
+ * @param resumeText - The extracted text from the resume
+ * @param jobDescription - The extracted text from the job description
+ * @returns Formatted prompt for the LLM
+ */
+export function buildAssessmentPrompt(resumeText: string, jobDescription: string): string {
+  return `You are an expert federal resume evaluator and career coach. Your task is to assess a candidate's resume against a specific job description.
+
+**JOB DESCRIPTION:**
+<job_description>
+${jobDescription}
+</job_description>
+
+**CANDIDATE RESUME:**
+<candidate_resume>
+${resumeText}
+</candidate_resume>
+
+**YOUR TASK:**
+Analyze the content within the <candidate_resume> tags against the requirements found in the <job_description> tags. Provide a detailed assessment report in structured JSON format.
+
+**OUTPUT STRUCTURE (JSON ONLY):**
+{
+  "score": number, // 0-100 match score
+  "summary": "Brief executive summary of the candidate's fit (2-3 sentences)",
+  "strengths": [
+    "Specific strength 1 related to the job",
+    "Specific strength 2 related to the job",
+    ...
+  ],
+  "gaps": [
+    "Missing skill or qualification 1",
+    "Area for improvement 2",
+    ...
+  ],
+  "recommendations": [
+    "Actionable advice 1 to improve the resume for this specific job",
+    "Actionable advice 2",
+    ...
+  ]
+}
+
+**ASSESSMENT CRITERIA & SCORING RULES:**
+
+1. **STRICT SKILL MATCHING (Critical):**
+   - Do NOT give credit for "transferable skills" if the specific REQUIRED technical skills are missing.
+   - If the job requires specific hard skills (e.g., Python, SQL, Operations Research, specific certifications) and the candidate lacks them, the score MUST be significantly lower (below 70).
+   - A candidate with great management experience but NO relevant technical experience for a technical role should NOT score high (e.g., a Personnelist applying for a Data Scientist role should score low, even if they are a great Personnelist).
+
+2. **ROLE ALIGNMENT:**
+   - Verify that the candidate's current and past job titles align with the target role.
+   - If the candidate is pivoting careers (e.g., Admin -> Tech), be skeptical unless there is concrete proof of the new skills (projects, degrees, certs).
+
+3. **QUANTIFIABLE IMPACT:**
+   - Look for specific numbers and metrics. General statements like "Managed team" are weak. "Managed team of 20" is better.
+
+4. **SCORING GUIDE:**
+   - **90-100:** Perfect match. All required skills, experience, and education present. Strong metrics.
+   - **80-89:** Strong match. Missing minor preferred skills but has all requirements.
+   - **70-79:** Good match. Has most requirements but missing some key technical skills or experience depth.
+   - **60-69:** Fair match. Has transferable skills but lacks core technical requirements.
+   - **<60:** Poor match. Significant gaps in required skills or experience.
+
+**IMPORTANT:**
+- Be CRITICAL. Do not inflate scores based on "potential". Grade based on *demonstrated* evidence in the resume.
+- If a candidate is missing a MANDATORY requirement (e.g., Security Clearance, Specific Degree), the score should reflect that heavily.
+- The output MUST be valid JSON. Do not include markdown formatting (like \`\`\`json) around the output. Just the raw JSON object.
+`;
+}

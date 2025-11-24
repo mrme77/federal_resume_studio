@@ -56,12 +56,14 @@ export class OpenRouterClient {
    * @param messages - Array of chat messages
    * @param temperature - Sampling temperature (optional)
    * @param maxTokens - Maximum tokens to generate (optional)
+   * @param topP - Nucleus sampling probability (optional)
    * @returns Chat completion result
    */
   async chatCompletion(
     messages: ChatMessage[],
     temperature?: number,
-    maxTokens?: number
+    maxTokens?: number,
+    topP?: number
   ): Promise<ChatCompletionResult> {
     const temp = temperature !== undefined ? temperature : TEMPERATURE;
     const tokens = maxTokens !== undefined ? maxTokens : MAX_TOKENS;
@@ -72,6 +74,7 @@ export class OpenRouterClient {
         messages: messages,
         temperature: temp,
         max_tokens: tokens,
+        top_p: topP,
       });
 
       // Verify we have the expected structure
@@ -99,10 +102,10 @@ export class OpenRouterClient {
         model: completion.model || this.model,
         usage: completion.usage
           ? {
-              prompt_tokens: completion.usage.prompt_tokens,
-              completion_tokens: completion.usage.completion_tokens,
-              total_tokens: completion.usage.total_tokens,
-            }
+            prompt_tokens: completion.usage.prompt_tokens,
+            completion_tokens: completion.usage.completion_tokens,
+            total_tokens: completion.usage.total_tokens,
+          }
           : undefined,
       };
     } catch (error) {
