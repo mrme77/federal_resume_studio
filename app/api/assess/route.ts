@@ -62,8 +62,7 @@ export async function POST(req: NextRequest) {
 
         // 3. Generate Assessment with LLM
         const client = new OpenRouterClient();
-        // Use a model good for analysis - gpt-4o-mini is requested by user
-        client.setModel("openai/gpt-4o-mini");
+        // Use default model (gpt-4o-mini)
 
         const prompt = buildAssessmentPrompt(resumeText, jobDescriptionText);
 

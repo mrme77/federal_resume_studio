@@ -14,14 +14,9 @@ export const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
 
 // Model Selection
 // Recommended models for this task:
-// - meta-llama/llama-3.3-70b-instruct: Powerful Llama model, excellent instruction following
-// - google/gemini-2.5-flash-lite: Fast, cost-effective Google model
 // - openai/gpt-4o-mini: Fast, cost-effective, excellent for text analysis
 // - anthropic/claude-3.5-sonnet: Superior at following formatting guidelines
-// - openai/gpt-4o: Most powerful but slower/more expensive
-// export const DEFAULT_MODEL = "meta-llama/llama-3.3-70b-instruct";
-export const DEFAULT_MODEL = "openai/gpt-4o-mini";  // OpenAI alternative
-// export const DEFAULT_MODEL = "google/gemini-2.5-flash-lite";  // Google alternative
+export const DEFAULT_MODEL = "openai/gpt-4o-mini";
 
 // File Configuration
 export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
