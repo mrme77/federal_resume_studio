@@ -32,16 +32,16 @@ export function StarryBackground() {
 
     // Initialize stars
     const initStars = () => {
-      const starCount = 150;
+      const starCount = 200;
       starsRef.current = [];
 
       for (let i = 0; i < starCount; i++) {
         starsRef.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          radius: Math.random() * 1.5 + 0.5, // 0.5-2px
+          radius: Math.random() * 1.5 + 1, // 1-2.5px
           opacity: Math.random(),
-          twinkleSpeed: Math.random() * 0.02 + 0.005, // Slow twinkle
+          twinkleSpeed: Math.random() * 0.03 + 0.01, // Faster twinkle
           twinklePhase: Math.random() * Math.PI * 2,
         });
       }
@@ -75,10 +75,10 @@ export function StarryBackground() {
         );
 
         // Deep space blue to lighter blue gradient
-        const alpha = star.opacity * 0.9;
-        gradient.addColorStop(0, `rgba(96, 165, 250, ${alpha})`); // Lighter blue center
-        gradient.addColorStop(0.5, `rgba(59, 130, 246, ${alpha * 0.6})`); // Medium blue
-        gradient.addColorStop(1, `rgba(30, 64, 175, 0)`); // Deep blue fade out
+        const alpha = star.opacity;
+        gradient.addColorStop(0, `rgba(147, 197, 253, ${alpha})`); // Brighter blue center
+        gradient.addColorStop(0.5, `rgba(96, 165, 250, ${alpha * 0.8})`); // Brighter medium blue
+        gradient.addColorStop(1, `rgba(59, 130, 246, 0)`); // Blue fade out
 
         ctx.fillStyle = gradient;
         ctx.fill();
@@ -101,7 +101,7 @@ export function StarryBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 z-0 pointer-events-none"
-      style={{ opacity: 0.7 }}
+      style={{ opacity: 1.0 }}
       aria-hidden="true"
     />
   );

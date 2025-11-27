@@ -1,5 +1,6 @@
 "use client";
 
+
 /**
  * Footer Component
  */

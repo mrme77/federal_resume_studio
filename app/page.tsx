@@ -10,10 +10,11 @@ import { JobDescriptionInput } from "@/components/JobDescriptionInput";
 import { AssessmentResult } from "@/components/AssessmentResult";
 import { MismatchDialog } from "@/components/MismatchDialog";
 import { RejectionDialog, RejectionType } from "@/components/RejectionDialog";
+import { StarryBackground } from "@/components/StarryBackground";
 import { GitHubCallout } from "@/components/GitHubStarButton";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Shield, Loader2, ArrowLeft, Upload, Sparkles, Download, ExternalLink } from "lucide-react";
+import { Shield, Loader2, ArrowLeft, Upload, Sparkles, Download, ExternalLink, Globe } from "lucide-react";
 
 type ProcessingState = "idle" | "processing" | "success" | "error";
 type AppStep = "mode-selection" | "file-upload";
@@ -312,8 +313,9 @@ export default function Home() {
   const canContinue = processingMode === "standard" || ((processingMode === "tailored" || processingMode === "assessment") && jobDescription.trim().length >= 10);
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-10 bg-gradient-to-b from-primary/5 via-background/95 to-background backdrop-blur-md border-b border-primary/10">
+    <div className="min-h-screen bg-background relative">
+      <StarryBackground />
+      <header className="sticky top-0 z-50 bg-gradient-to-b from-primary/5 via-background/95 to-background backdrop-blur-md border-b border-primary/10">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
             <div className="flex items-center justify-center gap-3 mb-3">
@@ -330,7 +332,7 @@ export default function Home() {
           </div>
         </div>
       </header>
-      <main className="container mx-auto px-4 py-8 max-w-5xl">
+      <main className="container mx-auto px-4 py-8 max-w-5xl relative z-10">
         {/* Mode Selection Step */}
         {currentStep === "mode-selection" && (
           <>
@@ -339,8 +341,8 @@ export default function Home() {
               onModeSelect={handleModeSelect}
             />
 
-            {/* Search Federal Jobs Button */}
-            <div className="flex justify-center mb-8">
+            {/* Search Federal Jobs & Developer Website Buttons */}
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
               <Button
                 variant="outline"
                 size="lg"
@@ -350,6 +352,18 @@ export default function Home() {
                 <a href="https://www.usajobs.gov/" target="_blank" rel="noopener noreferrer" aria-label="Search Federal Jobs on USAJobs.gov (opens in new tab)">
                   Search Federal Jobs
                   <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                </a>
+              </Button>
+
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+                className="gap-2 border-primary/30 hover:border-primary hover:bg-primary/5 transition-all duration-300"
+              >
+                <a href="https://mrme77.github.io/#" target="_blank" rel="noopener noreferrer" aria-label="Visit Developer Website (opens in new tab)">
+                  Visit Developer Website
+                  <Globe className="h-4 w-4" aria-hidden="true" />
                 </a>
               </Button>
             </div>
@@ -444,8 +458,8 @@ export default function Home() {
               </Card>
             </div>
 
-            {/* Search Federal Jobs Button */}
-            <div className="flex justify-center mb-8">
+            {/* Search Federal Jobs & Developer Website Buttons */}
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
               <Button
                 variant="outline"
                 size="lg"
@@ -455,6 +469,18 @@ export default function Home() {
                 <a href="https://www.usajobs.gov/" target="_blank" rel="noopener noreferrer" aria-label="Search Federal Jobs on USAJobs.gov (opens in new tab)">
                   Search Federal Jobs
                   <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                </a>
+              </Button>
+
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+                className="gap-2 border-primary/30 hover:border-primary hover:bg-primary/5 transition-all duration-300"
+              >
+                <a href="https://mrme77.github.io/#" target="_blank" rel="noopener noreferrer" aria-label="Visit Developer Website (opens in new tab)">
+                  Visit Developer Website
+                  <Globe className="h-4 w-4" aria-hidden="true" />
                 </a>
               </Button>
             </div>
