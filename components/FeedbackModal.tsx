@@ -103,7 +103,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                   Send Feedback
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                  We'd love to hear your thoughts, suggestions, or concerns.
+                  We&apos;d love to hear your thoughts, suggestions, or concerns.
                 </p>
               </div>
             </div>
@@ -129,7 +129,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                 Feedback Sent!
               </h3>
               <p className="text-sm text-muted-foreground text-center">
-                Thank you for your feedback. We'll review it shortly.
+                Thank you for your feedback. We&apos;ll review it shortly.
               </p>
             </div>
           )}

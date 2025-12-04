@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { extractTextFromPDF } from "@/lib/extractors/pdf-extractor";
 import { OpenRouterClient } from "@/lib/llm/openrouter-client";
 import { buildAssessmentPrompt } from "@/lib/llm/prompts";
-import * as cheerio from "cheerio";
+
 
 export const maxDuration = 60; // Allow up to 60 seconds for processing
 
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
         }
 
         // 2. Process Job Description (Text Only)
-        let jobDescriptionText = jobDescriptionInput.trim();
+        const jobDescriptionText = jobDescriptionInput.trim();
 
         // Basic validation
         if (jobDescriptionText.length < 50) {
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
             // Clean up markdown code blocks if present
             const cleanContent = completion.content.replace(/```json\n?|\n?```/g, "").trim();
             assessmentData = JSON.parse(cleanContent);
-        } catch (error) {
+        } catch {
             console.error("Failed to parse LLM response as JSON:", completion.content);
             return NextResponse.json(
                 { error: "Failed to generate a valid assessment report" },

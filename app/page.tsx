@@ -17,7 +17,16 @@ import { Card } from "@/components/ui/card";
 import { Shield, Loader2, ArrowLeft, Upload, Sparkles, Download, ExternalLink, Globe } from "lucide-react";
 
 type ProcessingState = "idle" | "processing" | "success" | "error";
+
 type AppStep = "mode-selection" | "file-upload";
+
+interface AssessmentData {
+  score: number;
+  summary: string;
+  strengths: string[];
+  gaps: string[];
+  recommendations: string[];
+}
 
 export default function Home() {
   // Mode selection state
@@ -41,7 +50,7 @@ export default function Home() {
   const [progress, setProgress] = useState<number>(0);
   const [error, setError] = useState<string>("");
   const [generatedResume, setGeneratedResume] = useState<Blob | null>(null);
-  const [assessmentResult, setAssessmentResult] = useState<any | null>(null);
+  const [assessmentResult, setAssessmentResult] = useState<AssessmentData | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [showGitHubCallout, setShowGitHubCallout] = useState<boolean>(false);
   const [flashContinueButton, setFlashContinueButton] = useState<boolean>(false);

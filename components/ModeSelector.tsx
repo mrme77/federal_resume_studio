@@ -143,7 +143,7 @@ export function ModeSelector({ selectedMode, onModeSelect }: ModeSelectorProps) 
               Resume Assessment
             </h3>
             <p className="text-muted-foreground text-sm mb-4">
-              Get a detailed report on your resume's strengths and weaknesses compared to a specific job description.
+              Get a detailed report on your resume&apos;s strengths and weaknesses compared to a specific job description.
             </p>
             <div className="text-xs text-muted-foreground space-y-1">
               <div>✓ Strength & Gap Analysis</div>

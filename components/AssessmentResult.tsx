@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+
 import { CheckCircle2, AlertCircle, Lightbulb, TrendingUp } from "lucide-react";
 
 interface AssessmentResultProps {
@@ -22,11 +22,7 @@ export function AssessmentResult({ result }: AssessmentResultProps) {
         return "text-red-600";
     };
 
-    const getProgressBarColor = (score: number) => {
-        if (score >= 80) return "bg-green-600";
-        if (score >= 60) return "bg-yellow-600";
-        return "bg-red-600";
-    };
+
 
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -65,7 +61,7 @@ export function AssessmentResult({ result }: AssessmentResultProps) {
                             </span>
                         </div>
                         <p className="text-center text-muted-foreground max-w-2xl italic">
-                            "{result.summary}"
+                            &quot;{result.summary}&quot;
                         </p>
                     </div>
 

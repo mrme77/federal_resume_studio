@@ -27,9 +27,7 @@ interface PdfData {
   Pages: PdfPage[];
 }
 
-interface PdfError {
-  parserError: Error;
-}
+
 
 
 /**
@@ -81,8 +79,8 @@ export function extractTextFromPDF(buffer: Buffer): Promise<ExtractResult> {
             if (decodedText) {
               // If Y position is significantly different, it's a new line
               if (lastY !== -1 && Math.abs(text.y - lastY) > 0.5) {
-                  full_text += line + '\n';
-                  line = '';
+                full_text += line + '\n';
+                line = '';
               }
               line += decodedText + ' ';
               lastY = text.y;
@@ -90,7 +88,7 @@ export function extractTextFromPDF(buffer: Buffer): Promise<ExtractResult> {
           });
           full_text += line.trim() + '\n\n'; // Add remaining line and space between pages
         });
-        
+
         const cleanedText = full_text
           .replace(/\r\n/g, "\n") // Normalize line endings
           .replace(/\r/g, "\n")
