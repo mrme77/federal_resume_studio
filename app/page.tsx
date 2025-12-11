@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import { FileUploader } from "@/components/FileUploader";
 
 import { ProcessingStatus } from "@/components/ProcessingStatus";
-import { Disclaimer } from "@/components/Disclaimer";
 import { ModeSelector, ProcessingMode } from "@/components/ModeSelector";
 import { JobDescriptionInput } from "@/components/JobDescriptionInput";
 import { AssessmentResult } from "@/components/AssessmentResult";
@@ -14,7 +13,8 @@ import { StarryBackground } from "@/components/StarryBackground";
 import { GitHubCallout } from "@/components/GitHubStarButton";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Shield, Loader2, ArrowLeft, Upload, Sparkles, Download, ExternalLink, Globe } from "lucide-react";
+import { Shield, Loader2, ArrowLeft, Upload, Sparkles, Download, ExternalLink, Globe, AlertTriangle } from "lucide-react";
+import { InfoDialog } from "@/components/InfoDialog";
 
 type ProcessingState = "idle" | "processing" | "success" | "error";
 
@@ -42,6 +42,10 @@ export default function Home() {
   const [showRejectionDialog, setShowRejectionDialog] = useState<boolean>(false);
   const [rejectionType, setRejectionType] = useState<RejectionType | null>(null);
   const [rejectionMessage, setRejectionMessage] = useState<string>("");
+
+  // Info dialog states
+  const [showPrivacyDialog, setShowPrivacyDialog] = useState<boolean>(false);
+  const [showLegalDialog, setShowLegalDialog] = useState<boolean>(false);
 
   // File processing state
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -326,7 +330,8 @@ export default function Home() {
       <StarryBackground />
       <header className="sticky top-0 z-50 bg-gradient-to-b from-primary/5 via-background/95 to-background backdrop-blur-md border-b border-primary/10">
         <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
+          <div className="text-center relative">
+            {/* Header Title Area */}
             <div className="flex items-center justify-center gap-3 mb-3">
               <div className="p-2 bg-primary/10 rounded-xl">
                 <Shield className="h-8 w-8 text-primary" aria-hidden="true" />
@@ -335,9 +340,60 @@ export default function Home() {
                 Federal Resume Studio
               </h1>
             </div>
-            <p className="text-md text-muted-foreground font-medium">
-              AI Powered Federally-Compliant Resume Generation {processingMode === "tailored" && "& Job Tailoring"} {processingMode === "assessment" && "& Assessment"}
-            </p>
+
+
+            {/* Header Utility Buttons */}
+            <div className="flex flex-col items-center gap-4">
+              {/* Row 1: External Links */}
+              <div className="flex flex-wrap justify-center gap-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  asChild
+                  className="gap-2 border-primary/20 hover:border-primary/80 hover:bg-primary hover:text-white hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 text-xs h-8"
+                >
+                  <a href="https://www.usajobs.gov/" target="_blank" rel="noopener noreferrer" aria-label="Search Federal Jobs on USAJobs.gov (opens in new tab)" className="hover:text-white">
+                    Search Federal Jobs
+                    <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                  </a>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  asChild
+                  className="gap-2 border-primary/20 hover:border-primary/80 hover:bg-primary hover:text-white hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 text-xs h-8"
+                >
+                  <a href="https://mrme77.github.io/#" target="_blank" rel="noopener noreferrer" aria-label="Visit Developer Website (opens in new tab)" className="hover:text-white">
+                    Visit Developer Website
+                    <Globe className="h-3 w-3" aria-hidden="true" />
+                  </a>
+                </Button>
+              </div>
+
+              {/* Row 2: Privacy & Legal (with enhanced hover effects) */}
+              <div className="flex flex-wrap justify-center gap-3">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowPrivacyDialog(true)}
+                  className="gap-2 text-xs h-8 text-muted-foreground hover:text-orange-500 hover:bg-orange-500/10 transition-colors duration-300"
+                >
+                  <Shield className="h-3 w-3" />
+                  Privacy & Security
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowLegalDialog(true)}
+                  className="gap-2 text-xs h-8 text-muted-foreground hover:text-orange-500 hover:bg-orange-500/10 transition-colors duration-300"
+                >
+                  <AlertTriangle className="h-3 w-3" />
+                  Legal & Usage Notice
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </header>
@@ -349,38 +405,6 @@ export default function Home() {
               selectedMode={processingMode}
               onModeSelect={handleModeSelect}
             />
-
-            {/* Search Federal Jobs & Developer Website Buttons */}
-            <div className="flex flex-wrap justify-center gap-4 mb-8">
-              <Button
-                variant="outline"
-                size="lg"
-                asChild
-                className="gap-2 border-primary/30 hover:border-primary hover:bg-primary/5 transition-all duration-300"
-              >
-                <a href="https://www.usajobs.gov/" target="_blank" rel="noopener noreferrer" aria-label="Search Federal Jobs on USAJobs.gov (opens in new tab)">
-                  Search Federal Jobs
-                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                </a>
-              </Button>
-
-              <Button
-                variant="outline"
-                size="lg"
-                asChild
-                className="gap-2 border-primary/30 hover:border-primary hover:bg-primary/5 transition-all duration-300"
-              >
-                <a href="https://mrme77.github.io/#" target="_blank" rel="noopener noreferrer" aria-label="Visit Developer Website (opens in new tab)">
-                  Visit Developer Website
-                  <Globe className="h-4 w-4" aria-hidden="true" />
-                </a>
-              </Button>
-            </div>
-
-            {/* Disclaimer - Show upfront before user makes commitment */}
-            <div className="mb-8">
-              <Disclaimer />
-            </div>
 
             {/* Job Description Input (only shown if tailored or assessment mode selected) */}
             {(processingMode === "tailored" || processingMode === "assessment") && (
@@ -467,33 +491,6 @@ export default function Home() {
               </Card>
             </div>
 
-            {/* Search Federal Jobs & Developer Website Buttons */}
-            <div className="flex flex-wrap justify-center gap-4 mb-8">
-              <Button
-                variant="outline"
-                size="lg"
-                asChild
-                className="gap-2 border-primary/30 hover:border-primary hover:bg-primary/5 transition-all duration-300"
-              >
-                <a href="https://www.usajobs.gov/" target="_blank" rel="noopener noreferrer" aria-label="Search Federal Jobs on USAJobs.gov (opens in new tab)">
-                  Search Federal Jobs
-                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                </a>
-              </Button>
-
-              <Button
-                variant="outline"
-                size="lg"
-                asChild
-                className="gap-2 border-primary/30 hover:border-primary hover:bg-primary/5 transition-all duration-300"
-              >
-                <a href="https://mrme77.github.io/#" target="_blank" rel="noopener noreferrer" aria-label="Visit Developer Website (opens in new tab)">
-                  Visit Developer Website
-                  <Globe className="h-4 w-4" aria-hidden="true" />
-                </a>
-              </Button>
-            </div>
-
             {/* File Uploader */}
             <div className="mb-8">
               <FileUploader onFileSelect={handleFileSelect} disabled={processingStatus === "processing"} />
@@ -550,11 +547,6 @@ export default function Home() {
                 )}
               </>
             )}
-
-            {/* Disclaimer */}
-            <div className="mt-12">
-              <Disclaimer />
-            </div>
           </>
         )}
       </main>
@@ -574,6 +566,68 @@ export default function Home() {
         message={rejectionMessage}
         onClose={handleRejectionClose}
       />
+
+      {/* Privacy & Security Dialog */}
+      <InfoDialog
+        isOpen={showPrivacyDialog}
+        onClose={() => setShowPrivacyDialog(false)}
+        title="Privacy & Security"
+        icon={Shield}
+        iconColorClass="text-primary"
+      >
+        <div className="space-y-4 text-sm text-muted-foreground p-2">
+          <p className="flex gap-2">
+            <span className="font-bold text-foreground min-w-[30px]">•</span>
+            <span><strong>Zero Data Retention (ZDR):</strong> Your resume data is NOT retained by AI providers. We configure all API calls to ensure no data is stored for training or history.</span>
+          </p>
+          <p className="flex gap-2">
+            <span className="font-bold text-foreground min-w-[30px]">•</span>
+            <span><strong>HTTPS Encryption:</strong> All data is encrypted in transit using industry-standard protocols.</span>
+          </p>
+          <p className="flex gap-2">
+            <span className="font-bold text-foreground min-w-[30px]">•</span>
+            <span><strong>No Persistent Storage:</strong> Your resume files are processed in memory and never saved to a database or file system on our servers.</span>
+          </p>
+          <p className="flex gap-2">
+            <span className="font-bold text-foreground min-w-[30px]">•</span>
+            <span><strong>Stateless Operation:</strong> No user accounts or authentication are required to use this tool, ensuring complete anonymity.</span>
+          </p>
+        </div>
+      </InfoDialog>
+
+      {/* Legal & Usage Notice Dialog */}
+      <InfoDialog
+        isOpen={showLegalDialog}
+        onClose={() => setShowLegalDialog(false)}
+        title="Legal & Usage Notice"
+        icon={AlertTriangle}
+        iconColorClass="text-orange-500" // Different accent color for distinction
+      >
+        <div className="space-y-4 text-sm text-muted-foreground p-2">
+          <p className="bg-muted p-4 rounded-md text-foreground">
+            <strong>Use at Your Own Risk:</strong> The developers make no warranties regarding the accuracy,
+            reliability, or suitability of the generated content.
+          </p>
+
+          <div>
+            <p className="font-semibold text-foreground mb-2">You are responsible for:</p>
+            <ul className="list-disc list-inside space-y-2 ml-2">
+              <li>Verifying all information in the generated resume.</li>
+              <li>Ensuring compliance with all agency-specific application requirements.</li>
+              <li>Reviewing and editing all AI-generated content before submission.</li>
+            </ul>
+          </div>
+
+          <div className="border-t pt-4 mt-2">
+            <p className="text-xs">
+              <strong>Important Notice:</strong> This application is not affiliated with, endorsed by, or authorized by
+              the U.S. Federal Government or any of its agencies. Its outputs do not represent any official federal
+              guidance or policy.
+            </p>
+          </div>
+        </div>
+      </InfoDialog>
+
     </div>
   );
 }

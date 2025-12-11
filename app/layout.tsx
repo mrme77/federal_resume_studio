@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { StarryBackground } from "@/components/StarryBackground";
-import { Footer } from "@/components/Footer";
+
 import { GitHubStarButton } from "@/components/GitHubStarButton";
 import { FeedbackButton } from "@/components/FeedbackButton";
 import { Analytics } from "@vercel/analytics/next";
@@ -48,7 +48,7 @@ export default function RootLayout({
         <div className="relative z-10 flex-1 flex flex-col">
           {children}
         </div>
-        <Footer />
+
         <Analytics />
         <SpeedInsights />
       </body>
