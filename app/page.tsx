@@ -328,7 +328,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background relative">
       <StarryBackground />
-      <header className="sticky top-0 z-50 bg-gradient-to-b from-primary/5 via-background/95 to-background backdrop-blur-md border-b border-primary/10">
+      <header className="sticky top-0 z-50 bg-gradient-to-b from-primary/5 via-background/95 to-background backdrop-blur-md">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center relative">
             {/* Header Title Area */}
