@@ -332,11 +332,14 @@ export default function Home() {
         <div className="container mx-auto px-4 py-8">
           <div className="text-center relative">
             {/* Header Title Area */}
-            <div className="flex items-center justify-center gap-3 mb-3">
-              <div className="p-2 bg-primary/10 rounded-xl">
-                <Shield className="h-8 w-8 text-primary" aria-hidden="true" />
+            <div className="relative flex items-center justify-center gap-4 mb-8">
+              {/* Shining Aura Effect */}
+              <div className="absolute -inset-8 bg-gradient-to-r from-primary/30 via-accent/30 to-primary/30 blur-3xl rounded-full opacity-70 animate-pulse -z-10" aria-hidden="true" />
+
+              <div className="p-3 bg-primary/10 rounded-2xl backdrop-blur-sm border border-primary/10">
+                <Shield className="h-10 w-10 text-primary" aria-hidden="true" />
               </div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent drop-shadow-sm pb-1">
                 Federal Resume Studio
               </h1>
             </div>
